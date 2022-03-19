@@ -1,57 +1,170 @@
 import React, { useState } from 'react'
-import Header from './views/Header'
-import Footer from './views/Footer'
-import Producto from './views/Producto'
-import Carrito from './views/Carrito'
+
+const styleAgenda = {
+  position: "fixed",
+  top: 0,
+  right:100,
+  backgroundColor: 'white',
+  with: "400px"
+};
+
+
+const Footer = (props) => {
+  
+  return(
+    <>
+      <div>Todos los derechos reservados {props.fecha}</div>
+    </>
+  )
+
+}
+
+const Header = (props) => {
+
+  return(
+    <>
+      <h1>
+        {props.titulo}
+      </h1>
+    </>
+  )
+
+}
+
+const Persona = (props) => {
+
+  const { persona, agenda, setAgregarAgenda } = props;
+
+  const { nombre, edad, telefono } = persona;
+
+  const agregarPersona = () => {
+
+    setAgregarAgenda([
+        ...agenda,
+        persona
+      ]
+      )    
+
+  }
+
+  return(
+  <div>
+    <h2>
+      <label>Nombre:</label> <label>{nombre}</label>
+    </h2>
+    <h2>
+      <label>Edad:</label> <label>{edad}</label>
+    </h2>
+    <h2>
+      <label>Telefono:</label> <label>{telefono}</label>
+    </h2>
+    <div>
+      <button
+        type='button'
+        onClick={ ()=> agregarPersona(nombre,edad) }
+      >
+        Agregar
+      </button>
+    </div>
+    
+  </div>
+  )
+
+}
+
+
+
+const Agenda = ( {agenda, setAgregarAgenda} ) => {
+
+  const eliminarPersona = (id) => {
+
+    const filterAgencia = agenda.filter( (age) => age.id !== id )
+  
+    setAgregarAgenda(filterAgencia)
+  
+  }
+
+  return(
+      
+    <div style={styleAgenda}>
+
+      <h1>Agenda de personas</h1>
+
+      {
+        agenda.length === 0 
+        ?
+          <div>No hay personas agregadas</div>
+        :
+          agenda.map( (agPersona) => 
+            (
+                <span key={agPersona.id}>
+                  <div>
+                  {agPersona.nombre}
+                  </div>
+                  <div>
+                  {agPersona.edad}
+                  </div>
+                  <div>
+                    {agPersona.telefono}
+                  </div>
+                  <div>
+                  <button
+                    onClick={()=> eliminarPersona(agPersona.id)}
+                  >
+                    Eliminar
+                  </button>
+                  </div>
+                  <br/>
+                </span>
+            ))
+      }
+
+    </div>
+
+  )
+
+}
 
 const App = () => {
 
-  // state del listado de productos
-
-  const [stProductos, setProductos] = useState([
-    { id:1, nombre:'Camisa React Js', precio:200 },
-    { id:2, nombre:'Camisa Angular Js', precio:150 },
-    { id:3, nombre:'Camisa Node Js', precio:250 },
-    { id:4, nombre:'Camisa Vue Js', precio:120 },
+  const [personas, setPersonas] = useState([
+    { id: 1, nombre:"Luis", edad: 30, telefono:"42134324323" },
+    { id: 2, nombre:"David", edad: 25, telefono:"3784573673" },
+    { id: 3, nombre:"Juan", edad: 15, telefono:"98453784384" },
+    { id: 4, nombre:"Ana", edad: 40, telefono:"07823637434"}
   ])
 
-  // state del carrito de compras
+  const [agenda, setAgregarAgenda] = useState([])
 
-  const [stCarrito, setCarrito] = useState([])
-
-
-  // acion del carrito de compras
-
-  const [stAccion, setAccion] = useState("comprar")
-
-  // obteniendo el año
   const fecha = new Date().getFullYear();
 
   return (
     <>
-      <Header 
-        titulo="Tienda virtual"
-        numero={20}
+      <Header
+        titulo="Tienda Vitual"
       />
 
-      <h1>Listado de productos</h1>
-      {stProductos.map( producto =>(
-          <Producto
-            key={producto.id}
-            producto={producto}
-            stProductos={stProductos}
-            stCarrito={stCarrito}
-            setCarrito={setCarrito}
-            accion={"comprar"}
+      <h1>Listado de personas</h1>
+      {
+        personas.map((persona,index) => (
+
+          <Persona
+            key={persona.id}
+            persona={persona}
+            agenda={agenda}
+            setAgregarAgenda={setAgregarAgenda}
           />
-      ) )}
 
-      <Carrito
-        stCarrito={stCarrito}
-        setCarrito={setCarrito}
-      />
+        ))
+      }
 
-      <Footer 
+          <Agenda
+            agenda={agenda}
+            setAgregarAgenda={setAgregarAgenda}            
+          />
+
+      <br/>
+      <Footer
         fecha={fecha}
       />
     </>
@@ -60,8 +173,7 @@ const App = () => {
 
 export default App
 
-
-
+// Otra forma de hacerlo
 
 /*
 import React, { useState } from 'react'
