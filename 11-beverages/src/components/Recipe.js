@@ -94,7 +94,7 @@ const Recipe = ({recipe}) => {
                     
                     }}
                 >
-                    Ver Receta
+                    See Recipe
                 </button>
 
                 <Modal
